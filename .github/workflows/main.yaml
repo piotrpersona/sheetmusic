@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - '**.go'
-      - 'Dockerfile'
+      - '*.Dockerfile'
       - 'go.*'
       - 'templates/**'
       - 'pdf/**'
