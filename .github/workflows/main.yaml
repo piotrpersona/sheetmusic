@@ -74,10 +74,12 @@ jobs:
         run: |
           IMAGE=$DOCKER_USERNAME/musescore
           TAG=$GITHUB_SHA-$GITHUB_RUN_ID
-          docker build -t $IMAGE:$TAG .
+          docker build -t $IMAGE:$TAG -f musescore.Dockerfile .
           docker push $IMAGE:$TAG
           docker tag $IMAGE:$TAG $IMAGE:latest
           docker push $IMAGE:latest
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           docker tag $IMAGE:$TAG $IMAGE:$BRANCH
           docker push $IMAGE:$BRANCH
+          docker tag $IMAGE:$TAG $IMAGE:3
+          docker push $IMAGE:3
