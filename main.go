@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var (
@@ -18,6 +19,7 @@ var (
 	readmeFile = "README.md"
 	ghPagesIndex = "docs/index.md"
 	readmeTemplate = "templates/README.md.tmpl"
+	ghPagesTemplate = "templates/index.md.tmpl"
 )
 
 type PDF struct {
@@ -74,8 +76,8 @@ func constructPDFs(names []string) (pdfs []PDF, err error) {
 	return
 }
 
-func templateREADME(templateData TemplateData, writers ...io.Writer) (err error) {
-	tmpl, err := template.New("README.md.tmpl").ParseFiles(readmeTemplate)
+func templateDocument(templateFile string, templateData TemplateData, writers ...io.Writer) (err error) {
+	tmpl, err := template.New(strings.Split(templateFile, "/")[1]).ParseFiles(templateFile)
 	if err != nil {
 		return
 	}
@@ -114,6 +116,12 @@ func main() {
 	}
 
 	templateData := TemplateData{PDFs: pdfs}
-	err = templateREADME(templateData, readmeWriter, ghPagesWriter)
-	panicErr(err)
+	templateWriterMap := map[string]io.Writer{
+		readmeTemplate: readmeWriter,
+		ghPagesTemplate: ghPagesWriter,
+	}
+	for templateFile, writer := range templateWriterMap {
+		err = templateDocument(templateFile, templateData, writer)
+		panicErr(err)
+	}
 }
