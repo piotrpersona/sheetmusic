@@ -89,7 +89,7 @@ func main() {
 	pdfs, err := constructPDFs(files)
 	panicErr(err)
 
-	fileWriter, err := os.OpenFile(readmeFile, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	fileWriter, err := os.OpenFile(readmeFile, os.O_WRONLY, os.ModeAppend)
 	panicErr(err)
 	if fileWriter != nil {
 		defer func() {
