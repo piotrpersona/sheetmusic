@@ -5,3 +5,5 @@ RUN apt update \
         && add-apt-repository ppa:mscore-ubuntu/mscore3-stable \
         && apt-get update \
         && apt-get -y install musescore3
+
+ENTRYPOINT ["musescore3"]
