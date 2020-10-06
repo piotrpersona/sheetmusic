@@ -4,7 +4,6 @@ WORKDIR "/go/src/github.com/piotrpersona/sheetmusic"
 
 RUN apk update && apk add dep git
 COPY go.mod .
-COPY go.sum .
 RUN go mod vendor
 COPY main.go .
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
