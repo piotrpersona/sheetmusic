@@ -47,5 +47,7 @@ jobs:
       - name: Generate docs
         run: |
           docker run -v $(pwd):/workdir -w /workdir piotrpersona/sheetmusic:latest
+          git config --global user.email "$GH_USER_EMAIL"
+          git config --global user.name "$GITHUB_ACTOR"
           git commit -m 'CI auto generate docs'
           git push origin master
