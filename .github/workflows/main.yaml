@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_SECRET }}
       - name: Generate docs
-        run:
+        run: |
           docker run -v $(pwd):/workdir -w /workdir piotrpersona/sheetmusic:latest
           git commit -m 'CI auto generate docs'
           git push origin master
