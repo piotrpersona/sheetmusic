@@ -51,5 +51,7 @@ jobs:
           git config --global user.email "$GH_USER_EMAIL"
           git config --global user.name "$GITHUB_ACTOR"
           find . -name '*.md' -print0 | xargs -0 git add
-          git commit -m 'CI auto generate docs' || :
-          git push origin main || :
+          [[ $( git diff ) != "" ]] \
+            && git commit -m 'CI auto generate docs' \
+            && git push origin main \
+            && echo "Successfully pushed to origin"
