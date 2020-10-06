@@ -6,6 +6,7 @@ RUN apt update \
         && apt-get update \
         && apt-get -y install musescore3
 
+ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :1
 
 RUN apt-get update \
