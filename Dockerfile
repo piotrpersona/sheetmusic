@@ -16,3 +16,5 @@ FROM scratch
 
 COPY --from=stage-build \
     /go/bin/package /usr/local/bin/package
+
+ENTRYPOINT ["/usr/local/bin/package"]

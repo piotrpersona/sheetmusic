@@ -1,7 +1,16 @@
 
 name: CI
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**.go'
+      - 'Dockerfile'
+      - 'go.*'
+      - 'templates/**'
+      - 'pdf/**'
+      - 'musescore/**'
+      - '.github**/'
 
 jobs:
   build:
@@ -25,3 +34,15 @@ jobs:
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
           docker tag $IMAGE:$TAG $IMAGE:$BRANCH
           docker push $IMAGE:$BRANCH
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_SECRET }}
+      - uses:
+          docker run -v $(pwd):/workdir -w /workdir piotrpersona/sheetmusic:latest
