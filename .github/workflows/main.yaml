@@ -52,4 +52,4 @@ jobs:
           git config --global user.name "$GITHUB_ACTOR"
           find . -name '*.md' -print0 | xargs -0 git add
           git commit -m 'CI auto generate docs'
-          git push origin master
+          git push origin main
