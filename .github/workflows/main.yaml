@@ -74,6 +74,7 @@ jobs:
         run: |
           IMAGE=$DOCKER_USERNAME/musescore
           TAG=$GITHUB_SHA-$GITHUB_RUN_ID
+          docker pull $IMAGE:latest
           docker build -t $IMAGE:$TAG -f musescore.Dockerfile .
           docker push $IMAGE:$TAG
           docker tag $IMAGE:$TAG $IMAGE:latest
