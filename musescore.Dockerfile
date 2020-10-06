@@ -6,4 +6,7 @@ RUN apt update \
         && apt-get update \
         && apt-get -y install musescore3
 
+RUN apt-get update \
+        && apt-get -y install xserver-xorg-video-dummy x11-apps
+
 ENTRYPOINT ["musescore3"]
