@@ -16,6 +16,7 @@ var (
 	branch = "main"
 	directory = "pdf"
 	readmeFile = "README.md"
+	ghPagesIndex = "docs/index.md"
 	readmeTemplate = "templates/README.md.tmpl"
 )
 
@@ -73,12 +74,17 @@ func constructPDFs(names []string) (pdfs []PDF, err error) {
 	return
 }
 
-func templateREADME(writer io.Writer, templateData TemplateData) (err error) {
+func templateREADME(templateData TemplateData, writers ...io.Writer) (err error) {
 	tmpl, err := template.New("README.md.tmpl").ParseFiles(readmeTemplate)
 	if err != nil {
 		return
 	}
-	err = tmpl.Execute(writer, templateData)
+	for _, writer := range writers {
+		err = tmpl.Execute(writer, templateData)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 
@@ -89,15 +95,25 @@ func main() {
 	pdfs, err := constructPDFs(files)
 	panicErr(err)
 
-	fileWriter, err := os.OpenFile(readmeFile, os.O_WRONLY, os.ModeAppend)
+	readmeWriter, err := os.OpenFile(readmeFile, os.O_WRONLY, os.ModeAppend)
 	panicErr(err)
-	if fileWriter != nil {
+	if readmeWriter != nil {
 		defer func() {
-			err = fileWriter.Close()
+			err = readmeWriter.Close()
 			panicErr(err)
 		}()
 	}
+
+	ghPagesWriter, err := os.OpenFile(ghPagesIndex, os.O_WRONLY, os.ModeAppend)
+	panicErr(err)
+	if ghPagesWriter != nil {
+		defer func() {
+			err = ghPagesWriter.Close()
+			panicErr(err)
+		}()
+	}
+
 	templateData := TemplateData{PDFs: pdfs}
-	err = templateREADME(fileWriter, templateData)
+	err = templateREADME(templateData, readmeWriter, ghPagesWriter)
 	panicErr(err)
 }
